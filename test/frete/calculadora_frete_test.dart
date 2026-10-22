@@ -118,4 +118,66 @@ void main() {
 
     expect(resultado.valor, closeTo(22.0, 0.01));
   });
+
+  // cupons de frete
+  test('cupom FRETEGRATIS deve zerar o frete', () {
+    final resultado = calculadora.calcular(
+      tipo: TipoFrete.economico,
+      peso: 2.0,
+      distanciaKm: 100.0,
+      valorCompra: 100.0,
+      cupom: 'FRETEGRATIS',
+    );
+
+    expect(resultado.valor, closeTo(0.0, 0.01));
+  });
+
+  test('cupom FRETE50 deve aplicar cinquenta por cento de desconto', () {
+    final resultado = calculadora.calcular(
+      tipo: TipoFrete.economico,
+      peso: 2.0,
+      distanciaKm: 100.0,
+      valorCompra: 100.0,
+      cupom: 'FRETE50',
+    );
+
+    expect(resultado.valor, closeTo(11.0, 0.01));
+  });
+
+  test('cupom inválido não deve alterar valor do frete', () {
+    final resultado = calculadora.calcular(
+      tipo: TipoFrete.economico,
+      peso: 2.0,
+      distanciaKm: 100.0,
+      valorCompra: 100.0,
+      cupom: 'ABC123',
+    );
+
+    expect(resultado.valor, closeTo(22.0, 0.01));
+  });
+
+  test('cupom fretegratis em minúsculo deve zerar frete', () {
+    final resultado = calculadora.calcular(
+      tipo: TipoFrete.economico,
+      peso: 2.0,
+      distanciaKm: 100.0,
+      valorCompra: 100.0,
+      cupom: 'fretegratis',
+    );
+
+    expect(resultado.valor, closeTo(0.0, 0.01));
+  });
+
+  // regra de negócio: frete grátis por valor da compra vence qualquer cupom
+  test('frete grátis por valor da compra deve ter prioridade sobre cupom', () {
+    final resultado = calculadora.calcular(
+      tipo: TipoFrete.economico,
+      peso: 2.0,
+      distanciaKm: 100.0,
+      valorCompra: 350.0,
+      cupom: 'FRETE50',
+    );
+
+    expect(resultado.valor, closeTo(0.0, 0.01));
+  });
 }

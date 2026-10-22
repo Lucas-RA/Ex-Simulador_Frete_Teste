@@ -7,6 +7,7 @@ class CalculadoraFrete {
     required double peso,
     required double distanciaKm,
     required double valorCompra,
+    String cupom = '',
   }) {
     if (peso <= 0) {
       throw ArgumentError('O peso deve ser maior que zero');
@@ -44,8 +45,20 @@ class CalculadoraFrete {
     }
 
     // compras a partir de R$ 300,00 possuem frete grátis
+    // (essa regra vem antes dos cupons porque tem prioridade)
     if (valorCompra >= 300.0) {
       return resultado.copyWith(valor: 0.0);
+    }
+
+    // toUpperCase para aceitar o cupom digitado em minúsculo
+    if (cupom.toUpperCase() == 'FRETEGRATIS') {
+      return resultado.copyWith(valor: 0.0);
+    }
+
+    if (cupom.toUpperCase() == 'FRETE50') {
+      return resultado.copyWith(
+        valor: resultado.valor * 0.50,
+      );
     }
 
     return resultado;
