@@ -1,3 +1,4 @@
+import '../cupom/catalogo_cupons.dart';
 import '../models/resultado_frete.dart';
 import '../models/tipo_frete.dart';
 import 'strategy/frete_economico.dart';
@@ -26,22 +27,24 @@ class CalculadoraFrete {
     );
 
     // compras a partir de R$ 300,00 possuem frete grátis
-    // (essa regra vem antes dos cupons porque tem prioridade)
+    // (regra de maior prioridade: vem antes dos cupons)
     if (valorCompra >= 300.0) {
       return resultado.copyWith(valor: 0.0);
     }
 
-    // toUpperCase para aceitar o cupom digitado em minúsculo
-    if (cupom.toUpperCase() == 'FRETEGRATIS') {
-      return resultado.copyWith(valor: 0.0);
+    final cupomEncontrado = CatalogoCupons.buscar(cupom);
+
+    // cupom vazio ou inexistente: frete sem desconto
+    if (cupomEncontrado == null) {
+      return resultado;
     }
 
-    if (cupom.toUpperCase() == 'FRETE50') {
-      return resultado.copyWith(
-        valor: resultado.valor * 0.50,
-      );
-    }
+    final valorComDesconto = cupomEncontrado.aplicar(
+      resultado.valor,
+    );
 
-    return resultado;
+    return resultado.copyWith(
+      valor: valorComDesconto,
+    );
   }
 }
