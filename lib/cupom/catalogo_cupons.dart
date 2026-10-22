@@ -11,6 +11,10 @@ class CatalogoCupons {
       codigo: 'FRETE50',
       percentualDesconto: 0.50,
     ),
+    'FRETE20': CupomFrete(
+      codigo: 'FRETE20',
+      percentualDesconto: 0.20,
+    ),
   };
 
   static CupomFrete? buscar(String codigo) {
