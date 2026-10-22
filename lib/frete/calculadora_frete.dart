@@ -3,6 +3,7 @@ import '../models/resultado_frete.dart';
 import '../models/tipo_frete.dart';
 import 'strategy/frete_economico.dart';
 import 'strategy/frete_expresso.dart';
+import 'strategy/frete_same_day.dart';
 import 'strategy/frete_strategy.dart';
 import 'strategy/retirada_loja.dart';
 
@@ -19,6 +20,7 @@ class CalculadoraFrete {
       TipoFrete.economico => FreteEconomico(),
       TipoFrete.expresso => FreteExpresso(),
       TipoFrete.retirada => RetiradaLoja(),
+      TipoFrete.sameDay => FreteSameDay(),
     };
 
     final resultado = strategy.calcular(
